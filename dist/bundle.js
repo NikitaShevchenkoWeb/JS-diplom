@@ -511,7 +511,7 @@ const calc = () => {
         const data = () => {
             return new Promise((resolve, reject) => {
                 const request = new XMLHttpRequest();
-                request.open('GET', '/price.json');
+                request.open('GET', './price.json');
                 request.setRequestHeader('Content-type', 'application/json');
                 request.addEventListener('readystatechange', () => {
                     if (request.readyState !== 4) { return; }
