@@ -7,11 +7,9 @@ const sendForms = () => {
     const sendForm = (form) => {
         const loadMessage = 'images/icon/hourglass.svg',
             errorMessage = 'images/icon/error.svg';
-        // successMessage = 'images/icon/checked.svg';
 
         const statusMessage = document.createElement('img'),
             statusMessageWrap = document.createElement('div');
-        // statusMessage.style.cssText = 'width: 50px; margin-bottom: 10px;';
         statusMessageWrap.classList.add('msg-wrap');
 
         let timer = 5000;
@@ -36,7 +34,7 @@ const sendForms = () => {
                     if (response.status !== 200) {
                         throw new Error('Status network not 200');
                     }
-                    // statusMessage.src = successMessage;
+
                     const successForm = document.getElementById('thanks');
                     if (form.closest('.popup')) {
                         displayForm(form.closest('.popup'), 'none');
@@ -50,7 +48,6 @@ const sendForms = () => {
                 .catch( (error) => {
                     statusMessage.src = errorMessage;
                     console.log(error);
-                    // clearForm();
                 });
 
             setTimeout(() => {
@@ -119,7 +116,6 @@ const sendForms = () => {
             elemWrap.textContent = 'Вы не согласились на обработку персональных данных!';
 
             if (form.className === 'card-order_club') {
-                // form.insertBefore(elemWrap, document.querySelector(`.${form.className} .right`))
                 const personalData = document.querySelector(`.${form.className} .personal-data`);
                 personalData.appendChild(elemWrap);
             } else if (form.id === 'card_order') {

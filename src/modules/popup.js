@@ -10,7 +10,6 @@ const popup = () => {
         fixedGift.style.display = 'none'
     }
 
-
     //выбор клуба (var)
     const selectBtnClub = document.querySelector('.clubs-list'),
         clubsList = selectBtnClub.querySelector('ul');
@@ -77,7 +76,7 @@ const popup = () => {
             displayForm(form);
         }
 
-        if (target.matches('#gift button')) {localStorage.code = 'ТЕЛО2019';}
+        if (target.matches('#gift button')) {localStorage.code = 'ТЕЛО2020';}
 
         //меню-бургер
         if (target.matches('.menu-button img')) {

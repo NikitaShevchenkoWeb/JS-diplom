@@ -105,7 +105,6 @@ const popup = () => {
         fixedGift.style.display = 'none'
     }
 
-
     //выбор клуба (var)
     const selectBtnClub = document.querySelector('.clubs-list'),
         clubsList = selectBtnClub.querySelector('ul');
@@ -172,7 +171,7 @@ const popup = () => {
             displayForm(form);
         }
 
-        if (target.matches('#gift button')) {localStorage.code = 'ТЕЛО2019';}
+        if (target.matches('#gift button')) {localStorage.code = 'ТЕЛО2020';}
 
         //меню-бургер
         if (target.matches('.menu-button img')) {
@@ -502,24 +501,12 @@ const gallerySlider = () => {
 const calc = () => {
     //калькулятор
     const calc = () => {
-
-        // let obj = {
-        //     mozaika: [1999, 9900, 13900, 19900],
-        //     schelkovo: [2999, 14990, 21990, 24990]
-        // };
-        //
-        // let json = JSON.stringify(obj);
-        // console.log(json);
-
-
         const cardsForm = document.getElementById('card_order'),
             cardMozaika = document.getElementById('card_leto_mozaika'),
             cardSchelkovo = document.getElementById('card_leto_schelkovo'),
-            promocode = document.querySelector('.promocode'),
-            priceTotal = document.getElementById('price-total');
-
-        const month = document.querySelectorAll('input[name=card-type]'),
-            clubName = document.querySelectorAll('input[name=club-name]');
+            promoCode = document.querySelector('.promocode'),
+            priceTotal = document.getElementById('price-total'),
+            month = document.querySelectorAll('input[name=card-type]');
 
         const data = () => {
             return new Promise((resolve, reject) => {
@@ -531,16 +518,6 @@ const calc = () => {
 
                     if (request.status === 200) {
                         const data = JSON.parse(request.responseText);
-
-                        // let val = '';
-                        // data.cars.forEach(item => {
-                        //     if (item.brand === select) {
-                        //         const {brand, model, price} = item;
-                        //         val = `Тачка ${brand} ${model} <br> Цена: ${price}$`;
-                        //     }
-                        // });
-
-
                         resolve(data);
                     } else {
                         const error = 'Произошла ошибка';
@@ -552,43 +529,59 @@ const calc = () => {
         };
 
 
-        const addTotalPrice = (val) => {
-            month.forEach((item, i) => {
-                item.addEventListener('click', () => {
-                    if (promocode.value === 'ТЕЛО2020') { priceTotal.textContent = Math.floor(val[i] * 0.3); }
-                    else priceTotal.textContent = val[i];
+        const addTotalPrice = () => {
+            if (promoCode.value === 'ТЕЛО2020') { priceTotal.textContent = Math.floor(+priceTotal.textContent * 0.7); }
+
+            promoCode.addEventListener('input', () => {
+                if (promoCode.value === 'ТЕЛО2020') { priceTotal.textContent = Math.floor(+priceTotal.textContent * 0.7); }
+                else {
+                    month.forEach((item) => {
+                        if (item.checked) { loadForm(item); }
+                    })
+                }
+            })
+        };
+        addTotalPrice();
+
+
+        const loadForm = (target = null) => {
+            data()
+                .then( (data) => {
+
+                    let val = [];
+                    month.forEach((item, i) => {
+                        if (target === item) {
+                            let targetId = target.id.slice(-1);
+
+                            if (cardMozaika.checked || cardSchelkovo.checked) {
+                                if (cardMozaika.checked) {
+                                    data.mozaika.forEach((item) => { val.push(item) });
+                                } else if (cardSchelkovo.checked) {
+                                    data.schelkovo.forEach((item) => { val.push(item) });
+                                }
+
+                                if (promoCode.value === 'ТЕЛО2020') { priceTotal.textContent = Math.floor(val[i] * 0.7); }
+                                else priceTotal.textContent = val[targetId-1];
+                            }
+                        } else if (target === cardMozaika || target === cardSchelkovo) {
+                            if (item.checked) {
+                                let id = item.id.slice(-1),
+                                    nameClub = target.id.split('_')[2];
+
+                                data[nameClub].forEach((item) => { val.push(item) });
+                                if (promoCode.value === 'ТЕЛО2020') { priceTotal.textContent = Math.floor(val[i] * 0.7); }
+                                else priceTotal.textContent = val[id-1];
+                            }
+                        }
+                    });
                 })
-            });
+                .catch( (error) => console.log(error) );
         };
 
-
-        cardsForm.addEventListener('click',() => {
-                console.log('click');
-                data()
-                    .then( (data) => {
-
-                        let val = [];
-                        if (cardMozaika.checked) {
-                            val = [];
-                            data.mozaika.forEach((item) => { val.push(item) });
-
-                            addTotalPrice(val);
-
-                        } else if (cardSchelkovo.checked) {
-                            val = [];
-                            data.schelkovo.forEach((item) => { val.push(item) });
-
-                            addTotalPrice(val);
-                        }
-
-                    })
-                    .catch( (error) => console.log(error) )
-            }
-        );
-
+        cardsForm.addEventListener('click',(e) => { loadForm(e.target); });
     };
 
-    // calc();
+    calc();
 };
 
 /* harmony default export */ var modules_calc = (calc);
@@ -619,11 +612,9 @@ const sendForms = () => {
     const sendForm = (form) => {
         const loadMessage = 'images/icon/hourglass.svg',
             errorMessage = 'images/icon/error.svg';
-        // successMessage = 'images/icon/checked.svg';
 
         const statusMessage = document.createElement('img'),
             statusMessageWrap = document.createElement('div');
-        // statusMessage.style.cssText = 'width: 50px; margin-bottom: 10px;';
         statusMessageWrap.classList.add('msg-wrap');
 
         let timer = 5000;
@@ -648,7 +639,7 @@ const sendForms = () => {
                     if (response.status !== 200) {
                         throw new Error('Status network not 200');
                     }
-                    // statusMessage.src = successMessage;
+
                     const successForm = document.getElementById('thanks');
                     if (form.closest('.popup')) {
                         displayForm(form.closest('.popup'), 'none');
@@ -662,14 +653,11 @@ const sendForms = () => {
                 .catch( (error) => {
                     statusMessage.src = errorMessage;
                     console.log(error);
-                    // clearForm();
                 });
 
             setTimeout(() => {
                 const thanksPopup = document.getElementById('thanks');
-                if (thanksPopup.style.display === 'block') {
-                    thanksPopup.style.display = 'none';
-                }
+                if (thanksPopup.style.display === 'block') { thanksPopup.style.display = 'none'; }
 
                 statusMsgWrap.remove();
             }, timer)
@@ -733,7 +721,6 @@ const sendForms = () => {
             elemWrap.textContent = 'Вы не согласились на обработку персональных данных!';
 
             if (form.className === 'card-order_club') {
-                // form.insertBefore(elemWrap, document.querySelector(`.${form.className} .right`))
                 const personalData = document.querySelector(`.${form.className} .personal-data`);
                 personalData.appendChild(elemWrap);
             } else if (form.id === 'card_order') {
