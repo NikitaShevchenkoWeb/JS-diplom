@@ -14,7 +14,7 @@ const sendForms = () => {
         // statusMessage.style.cssText = 'width: 50px; margin-bottom: 10px;';
         statusMessageWrap.classList.add('msg-wrap');
 
-        let timer = 500000; //поменять
+        let timer = 5000;
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -54,6 +54,9 @@ const sendForms = () => {
                 });
 
             setTimeout(() => {
+                const thanksPopup = document.getElementById('thanks');
+                if (thanksPopup.style.display === 'block') { thanksPopup.style.display = 'none'; }
+
                 statusMsgWrap.remove();
             }, timer)
         });

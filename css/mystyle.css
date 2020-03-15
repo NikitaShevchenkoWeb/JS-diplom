@@ -22,6 +22,10 @@
     margin-bottom: 15px;
 }
 
+header .head .club-select .clubs-list ul {
+    z-index: 1002;
+}
+
 
 /*slider п9*/
 .services-slider {

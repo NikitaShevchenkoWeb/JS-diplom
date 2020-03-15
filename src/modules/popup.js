@@ -61,7 +61,7 @@ const popup = () => {
         }
 
         //выбор клуба
-        if (target.closest('.clubs-list')) {
+        if (target.closest('.clubs-list') && !target.matches('.clubs-list ul') && !target.matches('.clubs-list ul>li')) {
             displayForm(clubsList);
         } else if (!target.closest('.clubs-list')) {
             clubsList.style.display = 'none';
