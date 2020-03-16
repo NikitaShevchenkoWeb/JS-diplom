@@ -1,6 +1,7 @@
 'use strict';
 
 const servicesSlider = () => {
+
     //slider (п9)
     const servicesSlider = () => {
         const slide = document.querySelectorAll('.services-slider .slide'),
