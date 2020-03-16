@@ -286,6 +286,7 @@ const headerSlider = () => {
 
 
 const servicesSlider = () => {
+
     //slider (п9)
     const servicesSlider = () => {
         const slide = document.querySelectorAll('.services-slider .slide'),
@@ -510,16 +511,18 @@ const calc = () => {
 
 
         const addTotalPrice = () => {
-            if (promoCode.value === 'ТЕЛО2020') { priceTotal.textContent = Math.floor(+priceTotal.textContent * 0.7); }
-
-            promoCode.addEventListener('input', () => {
+            if (promoCode) {
                 if (promoCode.value === 'ТЕЛО2020') { priceTotal.textContent = Math.floor(+priceTotal.textContent * 0.7); }
-                else {
-                    month.forEach((item) => {
-                        if (item.checked) { loadForm(item); }
-                    })
-                }
-            })
+
+                promoCode.addEventListener('input', () => {
+                    if (promoCode.value === 'ТЕЛО2020') { priceTotal.textContent = Math.floor(+priceTotal.textContent * 0.7); }
+                    else {
+                        month.forEach((item) => {
+                            if (item.checked) { loadForm(item); }
+                        })
+                    }
+                })
+            }
         };
         addTotalPrice();
 
@@ -528,32 +531,34 @@ const calc = () => {
             data()
                 .then( (data) => {
 
-                    let val = [];
-                    month.forEach((item, i) => {
-                        if (target === item) {
-                            let targetId = target.id.slice(-1);
+                    if (promoCode) {
+                        let val = [];
+                        month.forEach((item, i) => {
+                            if (target === item) {
+                                let targetId = target.id.slice(-1);
 
-                            if (cardMozaika.checked || cardSchelkovo.checked) {
-                                if (cardMozaika.checked) {
-                                    data.mozaika.forEach((item) => { val.push(item) });
-                                } else if (cardSchelkovo.checked) {
-                                    data.schelkovo.forEach((item) => { val.push(item) });
+                                if (cardMozaika.checked || cardSchelkovo.checked) {
+                                    if (cardMozaika.checked) {
+                                        data.mozaika.forEach((item) => { val.push(item) });
+                                    } else if (cardSchelkovo.checked) {
+                                        data.schelkovo.forEach((item) => { val.push(item) });
+                                    }
+
+                                    if (promoCode.value === 'ТЕЛО2020') { priceTotal.textContent = Math.floor(val[i] * 0.7); }
+                                    else priceTotal.textContent = val[targetId-1];
                                 }
+                            } else if (target === cardMozaika || target === cardSchelkovo) {
+                                if (item.checked) {
+                                    let id = item.id.slice(-1),
+                                        nameClub = target.id.split('_')[2];
 
-                                if (promoCode.value === 'ТЕЛО2020') { priceTotal.textContent = Math.floor(val[i] * 0.7); }
-                                else priceTotal.textContent = val[targetId-1];
+                                    data[nameClub].forEach((item) => { val.push(item) });
+                                    if (promoCode.value === 'ТЕЛО2020') { priceTotal.textContent = Math.floor(val[i] * 0.7); }
+                                    else priceTotal.textContent = val[id-1];
+                                }
                             }
-                        } else if (target === cardMozaika || target === cardSchelkovo) {
-                            if (item.checked) {
-                                let id = item.id.slice(-1),
-                                    nameClub = target.id.split('_')[2];
-
-                                data[nameClub].forEach((item) => { val.push(item) });
-                                if (promoCode.value === 'ТЕЛО2020') { priceTotal.textContent = Math.floor(val[i] * 0.7); }
-                                else priceTotal.textContent = val[id-1];
-                            }
-                        }
-                    });
+                        });
+                    }
                 })
                 .catch( (error) => console.log(error) );
         };
@@ -626,8 +631,20 @@ const sendForms = () => {
                         displayForm(successForm);
                     } else { displayForm(successForm);}
 
-                    statusMsgWrap.remove();
 
+
+                    const promoCode = document.querySelector('.promocode');
+                    if (form.id === 'card_order' && promoCode) {
+                        const monthCheck = document.querySelectorAll(`#${form.id} input[type="radio"]`)[0],
+                              clubCheck = document.querySelectorAll(`#${form.id} .club input[type="radio"]`)[0],
+                              priceTotal = document.getElementById('price-total');
+
+                        monthCheck.checked = true;
+                        clubCheck.checked = true;
+                        priceTotal.textContent = '1999'
+                    }
+
+                    statusMsgWrap.remove();
                     clearForm();
                 })
                 .catch( (error) => {
