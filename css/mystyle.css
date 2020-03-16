@@ -108,7 +108,9 @@ header .head .club-select .clubs-list ul {
 
 
 @media (max-width: 992px) {
-
+    .services-slider .slide:nth-child(n+5) {
+        display: none;
+    }
 }
 
 @media (max-width: 768px) {
@@ -119,11 +121,19 @@ header .head .club-select .clubs-list ul {
     .fixed-gift {
         top: 60px;
     }
+
+    .services-slider .slide:nth-child(n+4) {
+        display: none;
+    }
 }
 
 @media (max-width: 576px) {
     /*для всех слайдеров*/
     .slide {
         margin: 0 auto !important;
+    }
+
+    .services-slider .slide:nth-child(n+2) {
+        display: none;
     }
 }

@@ -2,26 +2,6 @@
 
 const servicesSlider = () => {
     //slider (п9)
-    const slideElem = document.querySelectorAll('.services-slider .slide');
-    let arrSlideDeActive = [];
-    const addClassDeActiveSlide = () => {
-        arrSlideDeActive = [];
-
-        slideElem.forEach((item) => {
-            if (!item.className.split(' ')[1]) {
-                arrSlideDeActive.push(item);
-            }
-        });
-
-        arrSlideDeActive[arrSlideDeActive.length - 1].classList.add('services-slider-de-active');
-    };
-
-    if (screen.width <= 992) { addClassDeActiveSlide(); }
-    if (screen.width <= 768) { addClassDeActiveSlide(); }
-    if (screen.width <= 576) { addClassDeActiveSlide(); }
-    if (screen.width <= 500) { addClassDeActiveSlide(); }
-
-
     const servicesSlider = () => {
         const slide = document.querySelectorAll('.services-slider .slide'),
             slider = document.querySelector('.services-slider'),
