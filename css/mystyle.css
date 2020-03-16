@@ -115,6 +115,10 @@ header .head .club-select .clubs-list ul {
     .slider-dots {
         display: none;
     }
+
+    .fixed-gift {
+        top: 60px;
+    }
 }
 
 @media (max-width: 576px) {

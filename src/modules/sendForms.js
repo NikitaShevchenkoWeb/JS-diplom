@@ -132,7 +132,8 @@ const sendForms = () => {
 
             const regNum = /[^0-9\+]/g,
                 regPhone = /^[+]?[0-9]{1,11}$/g,
-                regStr = /[^А-Яа-яЁё\s]/g;
+                regStr = /[^А-Яа-яЁё\s]/g,
+                regStrCode = /[^A-Za-zА-Яа-яЁё0-9]/g;
 
             const valid = (input) => {
                 let val = input.value;
@@ -145,6 +146,9 @@ const sendForms = () => {
 
                 } else if (input.getAttribute("placeholder") === "Ваше имя..." && regStr.test(val)) {
                     val = val.replace(regStr, '');
+                    input.value = val;
+                } else if (input.className === "promocode") {
+                    val = val.replace(regStrCode, '');
                     input.value = val;
                 }
             };
